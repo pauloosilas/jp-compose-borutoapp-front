@@ -1,4 +1,4 @@
-package com.sumpaulo.borutoapp.presentation.screens.splash
+package com.sumpaulo.borutoapp.presentation.screens.welcome
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
@@ -19,7 +19,6 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -28,7 +27,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -36,9 +34,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.sumpaulo.borutoapp.R
 import com.sumpaulo.borutoapp.domain.model.OnBoardingPage
+import com.sumpaulo.borutoapp.navigation.Screen
 import com.sumpaulo.borutoapp.ui.theme.EXTRA_LARGE_PADDING
 import com.sumpaulo.borutoapp.ui.theme.SMALL_PADDING
 import com.sumpaulo.borutoapp.ui.theme.activeIndicatorColor
@@ -47,10 +47,12 @@ import com.sumpaulo.borutoapp.ui.theme.descriptionColor
 import com.sumpaulo.borutoapp.ui.theme.inactiveIndicatorColor
 import com.sumpaulo.borutoapp.ui.theme.titleColor
 import com.sumpaulo.borutoapp.ui.theme.welcomeScreenBackgroundColor
+import com.sumpaulo.borutoapp.util.Constants.LAST_ON_BOARDING_PAGE
 
 
 @Composable
-fun WelcomeScreen(navController: NavHostController){
+fun WelcomeScreen(navController: NavHostController,
+                  welcomeViewModel: WelcomeViewModel = hiltViewModel()){
     val pages = listOf(
         OnBoardingPage.First,
         OnBoardingPage.Second,
@@ -95,8 +97,11 @@ fun WelcomeScreen(navController: NavHostController){
 
         FinishButton(
             modifier = Modifier.weight(1f),
-            pagerState = pagerState) {
-
+            pagerState = pagerState)
+        {
+            navController.popBackStack()
+            navController.navigate(Screen.Home.route)
+            welcomeViewModel.saveOnBoardingState(completed = true)
         }
 
 
@@ -158,7 +163,7 @@ fun FinishButton(
     {
         AnimatedVisibility(
             modifier = Modifier.fillMaxWidth(),
-            visible = pagerState.currentPage == 2) {
+            visible = pagerState.currentPage == LAST_ON_BOARDING_PAGE) {
             Button(onClick = onClick,
                 shape = RoundedCornerShape(4.dp),
                 colors = ButtonDefaults.buttonColors(

@@ -60,6 +60,7 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
     implementation("com.google.dagger:hilt-android:2.51.1")
+    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
     kapt("com.google.dagger:hilt-android-compiler:2.51.1")
 
     implementation("androidx.navigation:navigation-compose:2.8.5")
@@ -74,6 +75,8 @@ dependencies {
     implementation("androidx.room:room-paging:$room_version")
 
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+
+    implementation("androidx.datastore:datastore-preferences:1.1.1")
 }
 
 kapt {
